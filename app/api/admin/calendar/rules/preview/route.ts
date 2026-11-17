@@ -19,7 +19,28 @@ export async function POST(request: NextRequest) {
     const body = await request.json()
     const rule = body.rule
     const count = typeof body.count === 'number' ? Math.min(12, Math.max(1, body.count)) : 3
-    const anchorDate = body.anchor_date ? new Date(body.anchor_date) : new Date()
+
+    // Support all aliases: base_date, baseDate, from, anchor_date, anchorDate, reference_date, referenceDate
+    const rawBaseDate =
+      body.base_date ??
+      body.baseDate ??
+      body.from ??
+      body.anchor_date ??
+      body.anchorDate ??
+      body.reference_date ??
+      body.referenceDate ??
+      request.nextUrl.searchParams.get('base_date') ??
+      request.nextUrl.searchParams.get('baseDate') ??
+      request.nextUrl.searchParams.get('from') ??
+      request.nextUrl.searchParams.get('anchor_date')
+
+    let anchorDate = new Date()
+    if (rawBaseDate) {
+      const parsed = new Date(rawBaseDate)
+      if (!isNaN(parsed.getTime())) {
+        anchorDate = parsed
+      }
+    }
 
     const validation = validateRecurrenceRule(rule)
     if (!validation.valid || !validation.normalizedRule) {

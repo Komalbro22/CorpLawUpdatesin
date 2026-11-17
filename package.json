@@ -1,6 +1,6 @@
 {
   "name": "corplawupdates",
-  "version": "2.75.0",
+  "version": "2.75.1",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "eslint app components lib types",
     "test": "jest",
-    "test:coverage": "jest --coverage"
+    "test:coverage": "jest --coverage",
+    "calendar:link": "node scripts/link-calendar-series.js"
   },
   "dependencies": {
     "@google-analytics/data": "^7.2.1",

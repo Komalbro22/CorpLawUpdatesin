@@ -33,6 +33,7 @@ const ALL_CATEGORY_PILLS = [
   { regulator: 'labor_law',  label: 'Labor Laws', href: '#labor',     color: 'bg-indigo-50 dark:bg-indigo-950/30 border-indigo-200 dark:border-indigo-800/40 text-indigo-700 dark:text-indigo-400', icon: '👷' },
   { regulator: 'fema',       label: 'FEMA',       href: '#fema',      color: 'bg-teal-50 dark:bg-teal-950/30 border-teal-200 dark:border-teal-800/40 text-teal-700 dark:text-teal-400',       icon: '🌐' },
   { regulator: 'rbi',        label: 'RBI',        href: '#rbi',       color: 'bg-purple-50 dark:bg-purple-950/30 border-purple-200 dark:border-purple-800/40 text-purple-700 dark:text-purple-400', icon: '🏦' },
+  { regulator: 'other',      label: 'Other',      href: '#other',     color: 'bg-slate-50 dark:bg-slate-900 border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300',         icon: '📜' },
 ]
 
 export default function CalendarPageClient({ entries }: CalendarPageClientProps) {
@@ -336,6 +337,7 @@ export default function CalendarPageClient({ entries }: CalendarPageClientProps)
   const laborEntries = grouped['labor_law'] || []
   const femaEntries = grouped['fema'] || []
   const rbiEntries = grouped['rbi'] || []
+  const otherEntries = grouped['other'] || []
 
   const progressPercentage = entries.length > 0 ? Math.round((doneCount / entries.length) * 100) : 0
 
@@ -719,6 +721,20 @@ export default function CalendarPageClient({ entries }: CalendarPageClientProps)
                   color="bg-purple-800"
                   dot="bg-purple-500"
                   entries={rbiEntries}
+                  onReport={openReportError}
+                  onRowClick={handleRowClick}
+                />
+              </div>
+            )}
+
+            {/* Other Compliances Section */}
+            {otherEntries.length > 0 && (
+              <div id="other" className="scroll-mt-20">
+                <TableSection
+                  title="📜 General & Other Compliances"
+                  color="bg-slate-700"
+                  dot="bg-slate-500"
+                  entries={otherEntries}
                   onReport={openReportError}
                   onRowClick={handleRowClick}
                 />

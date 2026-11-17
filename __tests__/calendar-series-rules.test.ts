@@ -132,5 +132,53 @@ describe('Compliance Calendar Series Rules Engine (§1)', () => {
       expect(preview[0].due_date).toMatch(/Manual/i)
       expect(preview[0].period_label).toMatch(/Documentation only/i)
     })
+
+    it('computes quarter_map strictly forward from base date without past instances', () => {
+      const rule: RecurrenceRule = {
+        template: 'quarter_map',
+        map: {
+          '1': [7, 31],
+          '2': [10, 31],
+          '3': [1, 31],
+          '4': [5, 31],
+        },
+      }
+      // Base date is 16 November 2026 (Q1 Jul and Q2 Oct have already passed)
+      const preview = computePreviewInstances(rule, new Date(2026, 10, 16), 3)
+      expect(preview).toHaveLength(3)
+      // Must start at Q3 31 Jan 2027
+      expect(preview[0].due_date).toBe('31 January 2027')
+      expect(preview[0].period_label).toMatch(/Q3/i)
+      // Next is Q4 31 May 2027
+      expect(preview[1].due_date).toBe('31 May 2027')
+      expect(preview[1].period_label).toMatch(/Q4/i)
+      // Next is Q1 31 July 2027
+      expect(preview[2].due_date).toBe('31 July 2027')
+      expect(preview[2].period_label).toMatch(/Q1/i)
+    })
+
+    it('computes instalment_map strictly forward from base date without past instances', () => {
+      const rule: RecurrenceRule = {
+        template: 'instalment_map',
+        map: [
+          { month: 6, day: 15, pct: 15, label: '1st' },
+          { month: 9, day: 15, pct: 45, label: '2nd' },
+          { month: 12, day: 15, pct: 75, label: '3rd' },
+          { month: 3, day: 15, pct: 100, label: '4th' },
+        ],
+      }
+      // Base date is 16 November 2026 (15 Jun and 15 Sep have passed)
+      const preview = computePreviewInstances(rule, new Date(2026, 10, 16), 3)
+      expect(preview).toHaveLength(3)
+      // Must start at 15 December 2026 (3rd instalment)
+      expect(preview[0].due_date).toBe('15 December 2026')
+      expect(preview[0].period_label).toMatch(/3rd Instalment/i)
+      // Next is 15 March 2027 (4th instalment)
+      expect(preview[1].due_date).toBe('15 March 2027')
+      expect(preview[1].period_label).toMatch(/4th Instalment/i)
+      // Next is 15 June 2027 (1st instalment of next FY)
+      expect(preview[2].due_date).toBe('15 June 2027')
+      expect(preview[2].period_label).toMatch(/1st Instalment/i)
+    })
   })
 })

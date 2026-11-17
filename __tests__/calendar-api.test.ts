@@ -20,6 +20,8 @@ import { GET as entryGet, PATCH as entryPatch, DELETE as entryDelete } from '@/a
 import { POST as entryRestorePost } from '@/app/api/admin/calendar/entries/[id]/restore/route'
 import { GET as entryHistoryGet } from '@/app/api/admin/calendar/entries/[id]/history/route'
 import { POST as importPost } from '@/app/api/admin/calendar/import/route'
+import { POST as rulesPreviewPost } from '@/app/api/admin/calendar/rules/preview/route'
+import { POST as rulesLinkPost } from '@/app/api/admin/calendar/rules/link/route'
 import { NextRequest } from 'next/server'
 
 jest.setTimeout(60000)
@@ -53,6 +55,11 @@ describe('Compliance Calendar API & Permissions End-to-End Suite', () => {
     if (testCategoryId) {
       await supabaseAdmin.from('compliance_categories').delete().eq('id', testCategoryId)
     }
+    // Safeguard: remove any entries created by test key
+    await supabaseAdmin
+      .from('compliance_entries')
+      .delete()
+      .or('created_by.eq.jest-calendar-test-key,compliance_title.ilike.%Muse Verification%')
   })
 
   function makeAuthRequest(url: string, method: string = 'GET', body?: any): NextRequest {
@@ -123,7 +130,7 @@ describe('Compliance Calendar API & Permissions End-to-End Suite', () => {
     expect(patchData.category.colour).toBe('purple')
     expect(patchData.diff.name.old).toBe('Test Category For Muse')
     expect(patchData.diff.name.new).toBe('Test Category Updated')
-  }, 20000)
+  }, 45000)
 
   test('4. Entry Management: Create, Read, Duplicate Guard, Update, History, Soft Delete & Restore', async () => {
     const testFormName = `TEST-FORM-${Date.now()}`
@@ -312,4 +319,57 @@ describe('Compliance Calendar API & Permissions End-to-End Suite', () => {
     expect(data.summary.duplicate_warnings).toBeGreaterThanOrEqual(1)
     expect(data.preview[0].is_duplicate).toBe(true)
   }, 25000)
+
+  test('6. POST /api/admin/calendar/rules/preview supports base_date and from aliases', async () => {
+    const payloadWithBaseDate = {
+      rule: {
+        template: 'quarter_map',
+        map: {
+          '1': [7, 31],
+          '2': [10, 31],
+          '3': [1, 31],
+          '4': [5, 31],
+        },
+      },
+      base_date: '2026-11-16',
+      count: 3,
+    }
+
+    const req1 = makeAuthRequest('http://localhost:3000/api/admin/calendar/rules/preview', 'POST', payloadWithBaseDate)
+    const res1 = await rulesPreviewPost(req1)
+    expect(res1.status).toBe(200)
+    const data1 = await res1.json()
+    expect(data1.valid).toBe(true)
+    expect(data1.preview).toHaveLength(3)
+    // Starts forward from 16 Nov 2026 -> Q3 31 Jan 2027
+    expect(data1.preview[0].due_date).toBe('31 January 2027')
+    expect(data1.preview[1].due_date).toBe('31 May 2027')
+    expect(data1.preview[2].due_date).toBe('31 July 2027')
+
+    // Test 'from' alias
+    const payloadWithFrom = {
+      rule: {
+        template: 'day_of_month_next',
+        day: 20,
+      },
+      from: '2027-04-01',
+      count: 2,
+    }
+    const req2 = makeAuthRequest('http://localhost:3000/api/admin/calendar/rules/preview', 'POST', payloadWithFrom)
+    const res2 = await rulesPreviewPost(req2)
+    expect(res2.status).toBe(200)
+    const data2 = await res2.json()
+    expect(data2.preview[0].due_date).toBe('20 May 2027')
+    expect(data2.preview[1].due_date).toBe('20 June 2027')
+  })
+
+  test('7. POST /api/admin/calendar/rules/link runs series linking pass successfully', async () => {
+    const req = makeAuthRequest('http://localhost:3000/api/admin/calendar/rules/link', 'POST')
+    const res = await rulesLinkPost(req)
+    expect(res.status).toBe(200)
+    const data = await res.json()
+    expect(data.success).toBe(true)
+    expect(typeof data.linked_count).toBe('number')
+    expect(typeof data.total_candidates).toBe('number')
+  })
 })

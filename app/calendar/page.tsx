@@ -70,6 +70,8 @@ const STATUTORY_FAQS = [
   },
 ]
 
+const CANONICAL_REGULATORS = new Set(['income_tax', 'gst', 'mca', 'sebi', 'labor_law', 'fema', 'rbi', 'other'])
+
 export default async function CalendarPage() {
   const { data } = await supabase
     .from('compliance_entries')
@@ -79,7 +81,8 @@ export default async function CalendarPage() {
     .order('regulator')
     .order('display_order')
 
-  const rawEntries = (data || []) as ComplianceEntry[]
+  // Filter strictly by canonical regulators — guarantees test rows/unrecognized categories never skew counts
+  const rawEntries = ((data || []) as ComplianceEntry[]).filter(e => CANONICAL_REGULATORS.has(e.regulator))
 
   // Compute dynamic verification timestamp
   const latestVerifiedTimestamp = rawEntries

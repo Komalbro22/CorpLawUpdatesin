@@ -290,6 +290,29 @@ export async function POST(request: NextRequest) {
     const displayOrder = typeof canonical.display_order === 'number' ? canonical.display_order : 100
     const isLive = canonical.is_live !== false
 
+    let parentEntryId = canonical.parent_entry_id || null
+    if (!parentEntryId && !recurrenceRule) {
+      // Auto-linking check on insert: match existing active series root for this form and regulator
+      try {
+        const { data: matchingRoot } = await supabaseAdmin
+          .from('compliance_entries')
+          .select('id, recurrence_rule')
+          .eq('regulator', categorySlug)
+          .ilike('form_name', formName.trim())
+          .not('recurrence_rule', 'is', null)
+          .eq('is_active', true)
+          .eq('is_deleted', false)
+          .limit(1)
+          .maybeSingle()
+
+        if (matchingRoot) {
+          parentEntryId = matchingRoot.id
+        }
+      } catch {
+        // Non-blocking fallback
+      }
+    }
+
     const insertPayload = {
       form_name: formName,
       compliance_title: title,
@@ -311,6 +334,7 @@ export async function POST(request: NextRequest) {
       extension_ref: extensionRef,
       extension_note: extensionNote,
       recurrence_rule: recurrenceRule,
+      parent_entry_id: parentEntryId,
       display_order: displayOrder,
       is_active: isLive,
       is_live: isLive,

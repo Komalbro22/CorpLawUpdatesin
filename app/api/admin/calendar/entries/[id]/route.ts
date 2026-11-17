@@ -212,6 +212,11 @@ export async function PATCH(
       }
     }
 
+    // Parent entry ID (series linking)
+    if (canonical.parent_entry_id !== undefined) {
+      updates.parent_entry_id = canonical.parent_entry_id || null
+    }
+
     // Display order
     if (canonical.display_order !== undefined) {
       updates.display_order = Number(canonical.display_order)

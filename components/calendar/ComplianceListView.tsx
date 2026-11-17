@@ -174,6 +174,32 @@ export function groupEntriesIntoSeries(entries: ComplianceEntry[], today: Date =
     }
   }
 
+  // Fallback linking: map series roots by regulator + normalized form name so newly added cron rows
+  // with parent_entry_id: null are seamlessly grouped under their root without sitting ungrouped.
+  const rootByFormKey = new Map<string, string>()
+  for (const [rootId, rootEntry] of allRoots.entries()) {
+    if (rootEntry.recurrence_rule) {
+      const normForm = (rootEntry.form_name || '').toLowerCase().replace(/[^a-z0-9]/g, '')
+      rootByFormKey.set(`${rootEntry.regulator}:${normForm}`, rootId)
+    }
+  }
+
+  for (const entry of entries) {
+    if (!entry.parent_entry_id && !entry.recurrence_rule) {
+      const normForm = (entry.form_name || '').toLowerCase().replace(/[^a-z0-9]/g, '')
+      const matchingRootId = rootByFormKey.get(`${entry.regulator}:${normForm}`)
+      if (matchingRootId && matchingRootId !== entry.id) {
+        if (!childrenByParent.has(matchingRootId)) {
+          childrenByParent.set(matchingRootId, [])
+        }
+        const existingChildren = childrenByParent.get(matchingRootId)!
+        if (!existingChildren.some(c => c.id === entry.id)) {
+          existingChildren.push(entry)
+        }
+      }
+    }
+  }
+
   const handledEntryIds = new Set<string>()
   const items: DisplayItem[] = []
 

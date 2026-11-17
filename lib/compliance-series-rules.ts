@@ -268,7 +268,8 @@ export function validateRecurrenceRule(rule: any): {
 
 /**
  * Computes the next N preview instances given a validated rule and reference date.
- * Strictly implements §1.3 preview requirement.
+ * Strictly implements §1.3 preview requirement. All computed instances are guaranteed
+ * to be strictly forward from the anchor date (dueDate >= anchorMidnight).
  */
 export function computePreviewInstances(
   rule: RecurrenceRule,
@@ -288,12 +289,15 @@ export function computePreviewInstances(
   const results: Array<{ due_date: string; period_label: string }> = []
   const startYear = anchorDate.getFullYear()
   const startMonth = anchorDate.getMonth() + 1 // 1-12
+  const anchorMidnight = new Date(anchorDate.getFullYear(), anchorDate.getMonth(), anchorDate.getDate()).getTime()
 
   switch (rule.template) {
     case 'day_of_month_next': {
       let curY = startYear
       let curM = startMonth
-      while (results.length < count) {
+      let iterations = 0
+
+      while (results.length < count && iterations++ < 48) {
         if (rule.skip_months && rule.skip_months.includes(curM)) {
           curM++
           if (curM > 12) { curM = 1; curY++ }
@@ -308,10 +312,13 @@ export function computePreviewInstances(
           day = rule.month_overrides[String(curM)].day
         }
 
-        results.push({
-          due_date: `${day} ${MONTH_NAMES[dueM - 1]} ${dueY}`,
-          period_label: `${MONTH_NAMES[curM - 1]} ${curY}`
-        })
+        const dueTime = new Date(dueY, dueM - 1, day).getTime()
+        if (dueTime >= anchorMidnight) {
+          results.push({
+            due_date: `${day} ${MONTH_NAMES[dueM - 1]} ${dueY}`,
+            period_label: `${MONTH_NAMES[curM - 1]} ${curY}`
+          })
+        }
 
         curM++
         if (curM > 12) { curM = 1; curY++ }
@@ -322,7 +329,9 @@ export function computePreviewInstances(
     case 'month_end_plus_days': {
       let curY = startYear
       let curM = startMonth
-      while (results.length < count) {
+      let iterations = 0
+
+      while (results.length < count && iterations++ < 48) {
         // Find last day of period month curM in curY (day 0 of next month in JS Date)
         const lastDayOfPeriod = new Date(Date.UTC(curY, curM, 0))
         const dueDateObj = new Date(lastDayOfPeriod.getTime() + rule.days * 86400000)
@@ -330,10 +339,13 @@ export function computePreviewInstances(
         const m = dueDateObj.getUTCMonth()
         const y = dueDateObj.getUTCFullYear()
 
-        results.push({
-          due_date: `${d} ${MONTH_NAMES[m]} ${y}`,
-          period_label: `${MONTH_NAMES[curM - 1]} ${curY}`
-        })
+        const dueTime = new Date(y, m, d).getTime()
+        if (dueTime >= anchorMidnight) {
+          results.push({
+            due_date: `${d} ${MONTH_NAMES[m]} ${y}`,
+            period_label: `${MONTH_NAMES[curM - 1]} ${curY}`
+          })
+        }
 
         curM++
         if (curM > 12) { curM = 1; curY++ }
@@ -351,11 +363,11 @@ export function computePreviewInstances(
           { q: 3, m: 12, d: 31, label: (y: number) => `Q3 (Oct-Dec) FY ${y}-${String(y+1).slice(-2)}` },
         ]
 
-        let curY = startYear
-        let qIdx = quarterEnds.findIndex(qe => qe.m >= startMonth)
-        if (qIdx === -1) { qIdx = 0; curY++ }
+        let curY = startYear - 1
+        let qIdx = 0
+        let iterations = 0
 
-        while (results.length < count) {
+        while (results.length < count && iterations++ < 32) {
           const qe = quarterEnds[qIdx]
           if (rule.skip_quarters && rule.skip_quarters.includes(qe.q)) {
             qIdx = (qIdx + 1) % 4
@@ -365,35 +377,48 @@ export function computePreviewInstances(
 
           const qEndObj = new Date(Date.UTC(curY, qe.m - 1, qe.d))
           const dueDateObj = new Date(qEndObj.getTime() + rule.days * 86400000)
-          results.push({
-            due_date: `${dueDateObj.getUTCDate()} ${MONTH_NAMES[dueDateObj.getUTCMonth()]} ${dueDateObj.getUTCFullYear()}`,
-            period_label: qe.label(curY)
-          })
+          const dueTime = new Date(dueDateObj.getUTCFullYear(), dueDateObj.getUTCMonth(), dueDateObj.getUTCDate()).getTime()
+
+          if (dueTime >= anchorMidnight) {
+            results.push({
+              due_date: `${dueDateObj.getUTCDate()} ${MONTH_NAMES[dueDateObj.getUTCMonth()]} ${dueDateObj.getUTCFullYear()}`,
+              period_label: qe.label(curY)
+            })
+          }
 
           qIdx = (qIdx + 1) % 4
           if (qIdx === 0) curY++
         }
       } else if (rule.period === 'half_year') {
         // H1 ends 30 Sep, H2 ends 31 Mar
-        let curY = startYear
-        let isH1 = startMonth <= 9
+        let curY = startYear - 1
+        let isH1 = true
+        let iterations = 0
 
-        while (results.length < count) {
+        while (results.length < count && iterations++ < 20) {
           if (isH1) {
             const h1End = new Date(Date.UTC(curY, 8, 30))
             const dueObj = new Date(h1End.getTime() + rule.days * 86400000)
-            results.push({
-              due_date: `${dueObj.getUTCDate()} ${MONTH_NAMES[dueObj.getUTCMonth()]} ${dueObj.getUTCFullYear()}`,
-              period_label: `H1 (Apr-Sep) FY ${curY}-${String(curY + 1).slice(-2)}`
-            })
+            const dueTime = new Date(dueObj.getUTCFullYear(), dueObj.getUTCMonth(), dueObj.getUTCDate()).getTime()
+
+            if (dueTime >= anchorMidnight) {
+              results.push({
+                due_date: `${dueObj.getUTCDate()} ${MONTH_NAMES[dueObj.getUTCMonth()]} ${dueObj.getUTCFullYear()}`,
+                period_label: `H1 (Apr-Sep) FY ${curY}-${String(curY + 1).slice(-2)}`
+              })
+            }
             isH1 = false
           } else {
             const h2End = new Date(Date.UTC(curY + 1, 2, 31))
             const dueObj = new Date(h2End.getTime() + rule.days * 86400000)
-            results.push({
-              due_date: `${dueObj.getUTCDate()} ${MONTH_NAMES[dueObj.getUTCMonth()]} ${dueObj.getUTCFullYear()}`,
-              period_label: `H2 (Oct-Mar) FY ${curY}-${String(curY + 1).slice(-2)}`
-            })
+            const dueTime = new Date(dueObj.getUTCFullYear(), dueObj.getUTCMonth(), dueObj.getUTCDate()).getTime()
+
+            if (dueTime >= anchorMidnight) {
+              results.push({
+                due_date: `${dueObj.getUTCDate()} ${MONTH_NAMES[dueObj.getUTCMonth()]} ${dueObj.getUTCFullYear()}`,
+                period_label: `H2 (Oct-Mar) FY ${curY}-${String(curY + 1).slice(-2)}`
+              })
+            }
             isH1 = true
             curY++
           }
@@ -411,17 +436,22 @@ export function computePreviewInstances(
         { q: 3, endM: 12, dueM: 1, label: (y: number) => `Q3 (Oct-Dec) FY ${y}-${String(y+1).slice(-2)}`, dueYearOffset: 1 },
       ]
 
-      let curY = startYear
-      let qIdx = quarters.findIndex(q => q.endM >= startMonth)
-      if (qIdx === -1) { qIdx = 0; curY++ }
+      let curY = startYear - 1
+      let qIdx = 0
+      let iterations = 0
 
-      while (results.length < count) {
+      while (results.length < count && iterations++ < 32) {
         const q = quarters[qIdx]
         const dueY = curY + q.dueYearOffset
-        results.push({
-          due_date: `${rule.day} ${MONTH_NAMES[q.dueM - 1]} ${dueY}`,
-          period_label: q.label(curY)
-        })
+        const dueTime = new Date(dueY, q.dueM - 1, rule.day).getTime()
+
+        if (dueTime >= anchorMidnight) {
+          results.push({
+            due_date: `${rule.day} ${MONTH_NAMES[q.dueM - 1]} ${dueY}`,
+            period_label: q.label(curY)
+          })
+        }
+
         qIdx = (qIdx + 1) % 4
         if (qIdx === 0) curY++
       }
@@ -437,9 +467,11 @@ export function computePreviewInstances(
         (y: number) => `Q4 (Jan-Mar) FY ${y-1}-${String(y).slice(-2)}`,
       ]
 
-      let curY = startYear
+      let curY = startYear - 1
       let qIdx = 0
-      while (results.length < count) {
+      let iterations = 0
+
+      while (results.length < count && iterations++ < 32) {
         const qKey = qKeys[qIdx]
         const [m, d] = rule.map[qKey]
         // Year calculation: Q3/Q4 may fall in next calendar year
@@ -447,10 +479,13 @@ export function computePreviewInstances(
         if (qKey === '3' && m < 4) dueY = curY + 1
         if (qKey === '4') dueY = curY + 1
 
-        results.push({
-          due_date: `${d} ${MONTH_NAMES[m - 1]} ${dueY}`,
-          period_label: qLabels[qIdx](curY)
-        })
+        const dueTime = new Date(dueY, m - 1, d).getTime()
+        if (dueTime >= anchorMidnight) {
+          results.push({
+            due_date: `${d} ${MONTH_NAMES[m - 1]} ${dueY}`,
+            period_label: qLabels[qIdx](curY)
+          })
+        }
 
         qIdx = (qIdx + 1) % 4
         if (qIdx === 0) curY++
@@ -459,35 +494,44 @@ export function computePreviewInstances(
     }
 
     case 'fixed_annual': {
-      let curY = startYear
-      if (startMonth > rule.month || (startMonth === rule.month && anchorDate.getDate() > rule.day)) {
-        curY++
-      }
-      while (results.length < count) {
-        results.push({
-          due_date: `${rule.day} ${MONTH_NAMES[rule.month - 1]} ${curY}`,
-          period_label: `FY ${curY - 1}-${String(curY).slice(-2)}`
-        })
+      let curY = startYear - 1
+      let iterations = 0
+      while (results.length < count && iterations++ < 20) {
+        const dueTime = new Date(curY, rule.month - 1, rule.day).getTime()
+        if (dueTime >= anchorMidnight) {
+          results.push({
+            due_date: `${rule.day} ${MONTH_NAMES[rule.month - 1]} ${curY}`,
+            period_label: `FY ${curY - 1}-${String(curY).slice(-2)}`
+          })
+        }
         curY++
       }
       break
     }
 
     case 'half_year_fixed': {
-      let curY = startYear
-      let isH1 = startMonth <= rule.h1[0]
-      while (results.length < count) {
+      let curY = startYear - 1
+      let isH1 = true
+      let iterations = 0
+
+      while (results.length < count && iterations++ < 20) {
         if (isH1) {
-          results.push({
-            due_date: `${rule.h1[1]} ${MONTH_NAMES[rule.h1[0] - 1]} ${curY}`,
-            period_label: `H1 (Apr-Sep) FY ${curY}-${String(curY + 1).slice(-2)}`
-          })
+          const dueTime = new Date(curY, rule.h1[0] - 1, rule.h1[1]).getTime()
+          if (dueTime >= anchorMidnight) {
+            results.push({
+              due_date: `${rule.h1[1]} ${MONTH_NAMES[rule.h1[0] - 1]} ${curY}`,
+              period_label: `H1 (Apr-Sep) FY ${curY}-${String(curY + 1).slice(-2)}`
+            })
+          }
           isH1 = false
         } else {
-          results.push({
-            due_date: `${rule.h2[1]} ${MONTH_NAMES[rule.h2[0] - 1]} ${curY + 1}`,
-            period_label: `H2 (Oct-Mar) FY ${curY}-${String(curY + 1).slice(-2)}`
-          })
+          const dueTime = new Date(curY + 1, rule.h2[0] - 1, rule.h2[1]).getTime()
+          if (dueTime >= anchorMidnight) {
+            results.push({
+              due_date: `${rule.h2[1]} ${MONTH_NAMES[rule.h2[0] - 1]} ${curY + 1}`,
+              period_label: `H2 (Oct-Mar) FY ${curY}-${String(curY + 1).slice(-2)}`
+            })
+          }
           isH1 = true
           curY++
         }
@@ -496,29 +540,38 @@ export function computePreviewInstances(
     }
 
     case 'triennial_fixed': {
-      let curY = Math.max(rule.start_year, startYear)
-      while (results.length < count) {
-        results.push({
-          due_date: `${rule.day} ${MONTH_NAMES[rule.month - 1]} ${curY}`,
-          period_label: `Triennial Cycle (${curY - 3}–${curY})`
-        })
+      let curY = Math.max(rule.start_year, startYear - 3)
+      let iterations = 0
+      while (results.length < count && iterations++ < 15) {
+        const dueTime = new Date(curY, rule.month - 1, rule.day).getTime()
+        if (dueTime >= anchorMidnight) {
+          results.push({
+            due_date: `${rule.day} ${MONTH_NAMES[rule.month - 1]} ${curY}`,
+            period_label: `Triennial Cycle (${curY - 3}–${curY})`
+          })
+        }
         curY += 3
       }
       break
     }
 
     case 'instalment_map': {
-      let curY = startYear
+      let curY = startYear - 1
       let instIdx = 0
-      while (results.length < count) {
+      let iterations = 0
+
+      while (results.length < count && iterations++ < 32) {
         const inst = rule.map[instIdx]
         let dueY = curY
         if (inst.month < 4) dueY = curY + 1 // e.g. 4th instalment in March
 
-        results.push({
-          due_date: `${inst.day} ${MONTH_NAMES[inst.month - 1]} ${dueY}`,
-          period_label: `${inst.label} Instalment (${inst.pct}% cumulative) FY ${curY}-${String(curY + 1).slice(-2)}`
-        })
+        const dueTime = new Date(dueY, inst.month - 1, inst.day).getTime()
+        if (dueTime >= anchorMidnight) {
+          results.push({
+            due_date: `${inst.day} ${MONTH_NAMES[inst.month - 1]} ${dueY}`,
+            period_label: `${inst.label} Instalment (${inst.pct}% cumulative) FY ${curY}-${String(curY + 1).slice(-2)}`
+          })
+        }
 
         instIdx = (instIdx + 1) % rule.map.length
         if (instIdx === 0) curY++
@@ -536,4 +589,72 @@ export function computePreviewInstances(
   }
 
   return results
+}
+
+/**
+ * Normalizes form names for robust fuzzy matching.
+ * E.g., 'GSTR-3B' -> 'gstr3b', 'Advance Tax (4th Instalment)' -> 'advancetax'
+ */
+export function normalizeFormName(formName: string): string {
+  if (!formName) return ''
+  return formName
+    .toLowerCase()
+    .replace(/\(.*?\)/g, '') // remove parentheticals like '(4th Instalment)'
+    .replace(/[^a-z0-9]/g, '')
+    .trim()
+}
+
+/**
+ * Checks whether a candidate row's due_date fits a series root's recurrence rule.
+ */
+export function candidateDateMatchesRule(rule: RecurrenceRule, candidateDateStr: string): boolean {
+  const parsed = parseEntryDate(candidateDateStr)
+  if (!parsed) return false
+  const day = parsed.getDate()
+  const month = parsed.getMonth() + 1 // 1-12
+
+  switch (rule.template) {
+    case 'day_of_month_next': {
+      if (rule.day === day) return true
+      if (rule.month_overrides) {
+        return Object.values(rule.month_overrides).some(o => o.day === day)
+      }
+      return false
+    }
+    case 'day_after_period_end':
+      return rule.day === day
+    case 'quarter_map': {
+      return Object.values(rule.map).some(([m, d]) => m === month && d === day)
+    }
+    case 'instalment_map': {
+      return rule.map.some(inst => inst.month === month && inst.day === day)
+    }
+    case 'fixed_annual':
+      return rule.month === month && rule.day === day
+    case 'half_year_fixed':
+      return (rule.h1[0] === month && rule.h1[1] === day) || (rule.h2[0] === month && rule.h2[1] === day)
+    case 'triennial_fixed':
+      return rule.month === month && rule.day === day
+    case 'month_end_plus_days':
+    case 'period_end_plus_days':
+      return true
+    default:
+      return true
+  }
+}
+
+export interface LinkingMatch {
+  candidateId: string
+  candidateForm: string
+  candidateDueDate: string
+  candidateRegulator: string
+  rootId: string
+  rootForm: string
+  rootTemplate: string
+}
+
+export interface LinkingResult {
+  totalCandidates: number
+  linkedCount: number
+  matches: LinkingMatch[]
 }
