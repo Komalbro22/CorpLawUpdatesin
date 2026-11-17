@@ -16,6 +16,7 @@ export const metadata = {
 }
 
 import AdminMobileBottomNav from '@/components/admin/AdminMobileBottomNav'
+import './admin.css'
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
     const cookieStore = await cookies()

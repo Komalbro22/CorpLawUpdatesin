@@ -2,7 +2,8 @@
 
 import { useEffect, useRef, Suspense } from 'react'
 import { usePathname, useSearchParams } from 'next/navigation'
-import posthog from 'posthog-js'
+
+let posthogInstance: any = null
 
 function PostHogPageView(): null {
   const pathname = usePathname()
@@ -23,9 +24,9 @@ function PostHogPageView(): null {
         return
       }
 
-      if (lastTrackedPath.current !== url && posthog.__loaded) {
+      if (lastTrackedPath.current !== url && posthogInstance?.__loaded) {
         lastTrackedPath.current = url
-        posthog.capture('$pageview', {
+        posthogInstance.capture('$pageview', {
           $current_url: url,
         })
       }
@@ -45,25 +46,49 @@ export default function ConsentGatedAnalytics() {
       process.env.NEXT_PUBLIC_POSTHOG_HOST ||
       'https://us.i.posthog.com'
 
-    if (key && typeof window !== 'undefined') {
-      posthog.init(key, {
-        api_host: host,
-        person_profiles: 'identified_only', // Preserves free quota by skipping profile creation for anonymous readers
-        capture_pageview: false, // Manual pageview capture in PostHogPageView handles Next.js App Router navigations accurately
-        capture_pageleave: true,
-        disable_session_recording: true, // Keep OFF for zero performance overhead and 100/100 Core Web Vitals
-        autocapture: false, // Web Analytics mode: minimal payload, no DOM click listeners
-        persistence: 'localStorage+cookie',
-        loaded: (ph) => {
-          let url = window.origin + window.location.pathname
-          if (window.location.search) {
-            url += window.location.search
-          }
-          ph.capture('$pageview', {
-            $current_url: url,
-          })
-        },
-      })
+    if (!key || typeof window === 'undefined') return
+
+    const initPostHog = async () => {
+      try {
+        const { default: posthog } = await import('posthog-js')
+        posthogInstance = posthog
+
+        posthog.init(key, {
+          api_host: host,
+          person_profiles: 'identified_only', // Preserves free quota by skipping profile creation for anonymous readers
+          capture_pageview: false, // Manual pageview capture in PostHogPageView handles Next.js App Router navigations accurately
+          capture_pageleave: true,
+          disable_session_recording: true, // Keep OFF for zero performance overhead and 100/100 Core Web Vitals
+          disable_surveys: true, // Fix 4: Prevents loading unused 37.8 KiB surveys.js bundle
+          autocapture: false, // Web Analytics mode: minimal payload, no DOM click listeners
+          persistence: 'localStorage+cookie',
+          loaded: (ph: any) => {
+            let url = window.origin + window.location.pathname
+            if (window.location.search) {
+              url += window.location.search
+            }
+            ph.capture('$pageview', {
+              $current_url: url,
+            })
+          },
+        })
+      } catch (err) {
+        // Analytics failure should never impact site UX
+        console.warn('PostHog deferred initialization skipped:', err)
+      }
+    }
+
+    // Schedule PostHog initialization during browser idle time to keep critical rendering delay near 0
+    if ('requestIdleCallback' in window) {
+      const idleHandle = (window as any).requestIdleCallback(initPostHog, { timeout: 2500 })
+      return () => {
+        if ('cancelIdleCallback' in window) {
+          (window as any).cancelIdleCallback(idleHandle)
+        }
+      }
+    } else {
+      const timer = setTimeout(initPostHog, 1500)
+      return () => clearTimeout(timer)
     }
   }, [])
 

@@ -69,8 +69,8 @@ export async function GET(request: NextRequest) {
       })
     }
 
-    // Target width: default 720 for card thumbnails, max clamped between 100 and 1200
-    let targetWidth = 720
+    // Target width: default 420 for card thumbnails, max clamped between 100 and 1200
+    let targetWidth = 420
     if (widthParam) {
       const parsedW = parseInt(widthParam, 10)
       if (!isNaN(parsedW) && parsedW >= 100 && parsedW <= 1200) {
@@ -78,11 +78,11 @@ export async function GET(request: NextRequest) {
       }
     }
 
-    // Modern format WebP optimization with sharp
+    // Modern format WebP optimization with sharp (quality 75, effort 5 for ideal weight vs fidelity)
     try {
       const optimizedBuffer = await sharp(imageBuffer)
         .resize({ width: targetWidth, withoutEnlargement: true })
-        .webp({ quality: 80, effort: 4 })
+        .webp({ quality: 75, effort: 5 })
         .toBuffer()
 
       return new Response(optimizedBuffer, {

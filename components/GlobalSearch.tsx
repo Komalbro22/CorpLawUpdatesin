@@ -263,7 +263,6 @@ export default function GlobalSearch() {
       {mounted && open && typeof document !== 'undefined' && createPortal(
         <div
           className="fixed inset-0 z-50 bg-black/40 flex items-start justify-center pt-3 sm:pt-20 px-3 sm:px-4"
-          role="presentation"
           onClick={() => { setOpen(false); setQuery('') }}
         >
           <div

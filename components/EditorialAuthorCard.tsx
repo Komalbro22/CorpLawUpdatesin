@@ -56,7 +56,7 @@ export default function EditorialAuthorCard({ category, articleTitle, isSponsore
               className="inline-flex items-center gap-1 font-bold text-amber-700 dark:text-amber-400 hover:underline"
             >
               <span>{EDITORIAL_LEAD.name}</span>
-              <span className="text-slate-500 dark:text-slate-400 font-normal">({EDITORIAL_LEAD.role})</span>
+              <span className="text-slate-600 dark:text-slate-300 font-normal">({EDITORIAL_LEAD.role})</span>
             </Link>
           </div>
 
@@ -66,7 +66,7 @@ export default function EditorialAuthorCard({ category, articleTitle, isSponsore
 
           {/* Primary Regulators Monitored */}
           {desk.regulators && desk.regulators.length > 0 && (
-            <div className="flex flex-wrap items-center gap-1.5 pt-1 text-xs text-slate-500 dark:text-slate-400">
+            <div className="flex flex-wrap items-center gap-1.5 pt-1 text-xs text-slate-600 dark:text-slate-300">
               <span className="font-semibold text-slate-700 dark:text-slate-300 flex items-center gap-1">
                 <FileCheck className="size-3.5 text-slate-400" aria-hidden="true" />
                 Primary Sources:

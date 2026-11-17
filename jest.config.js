@@ -7,6 +7,8 @@ module.exports = {
   moduleNameMapper: {
     // Resolve @/ path alias to match tsconfig paths
     '^@/(.*)$': '<rootDir>/$1',
+    // Mock CSS stylesheets imported in components
+    '\\.(css|less|sass|scss)$': '<rootDir>/__tests__/__mocks__/styleMock.js',
     // Mock Next.js server-only modules unavailable in Jest node env
     '^next/headers$': '<rootDir>/__tests__/__mocks__/next-headers.ts',
     '^next/font/google$': '<rootDir>/__tests__/__mocks__/next-font-google.ts',

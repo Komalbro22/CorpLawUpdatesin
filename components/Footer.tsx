@@ -67,7 +67,10 @@ export default async function Footer() {
     const telegramUrl = social.telegram_channel || 'https://t.me/corplawupdate'
 
     return (
-        <footer className="bg-navy text-white pt-16 pb-10 relative overflow-hidden">
+        <footer
+            className="bg-navy text-white pt-16 pb-10 relative overflow-hidden min-h-[440px]"
+            style={{ contain: 'layout' }}
+        >
              {/* Structural top divider */}
             <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-px bg-linear-to-r from-transparent via-white/15 to-transparent" aria-hidden />
 

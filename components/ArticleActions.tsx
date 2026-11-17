@@ -125,6 +125,7 @@ export default function ArticleActions({
                 {slug && (
                     <button
                         onClick={toggleBookmark}
+                        aria-label={bookmarked ? "Remove bookmark" : "Bookmark this article"}
                         className={`shrink-0 flex items-center gap-1.5 border px-2.5 py-1.5 rounded-lg transition-all text-xs font-medium ${
                             bookmarked
                                 ? 'border-amber-500 bg-amber-50 dark:bg-amber-950/30 text-amber-700 dark:text-amber-400'
@@ -140,6 +141,7 @@ export default function ArticleActions({
                 <div className="relative shrink-0">
                     <button
                         onClick={copyLink}
+                        aria-label="Copy article link to clipboard"
                         className="flex items-center gap-1.5 border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/60 text-slate-700 dark:text-slate-300 px-2.5 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-all text-xs font-medium"
                     >
                         {copied ? (

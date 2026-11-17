@@ -469,6 +469,7 @@ export default function MarkdownRenderer({
                         return (
                             <th
                                 suppressHydrationWarning
+                                scope={props.scope || 'col'}
                                 style={processedStyle}
                                 className={`px-4 py-3 text-left font-heading font-bold text-sm tracking-normal border-b border-slate-200 dark:border-slate-700 ${defaultBg} ${defaultText} ${processedClassName}`}
                                 {...props}
@@ -564,14 +565,17 @@ export default function MarkdownRenderer({
                                 resolvedSrc = '/' + resolvedSrc;
                             }
                         }
-                        resolvedSrc = getProxiedImageUrl(resolvedSrc) || resolvedSrc;
+                        resolvedSrc = getProxiedImageUrl(resolvedSrc, 1200) || resolvedSrc;
+                        const accessibleAlt = alt && alt.trim() ? alt.trim() : 'Official corporate law regulatory update document';
 
                         return (
                             <img
                                 src={resolvedSrc}
-                                alt={alt || ''}
+                                alt={accessibleAlt}
                                 loading="lazy"
                                 decoding="async"
+                                width={props.width || 1200}
+                                height={props.height || 675}
                                 referrerPolicy="no-referrer"
                                 onError={(e) => {
                                     const target = e.currentTarget;
@@ -583,6 +587,7 @@ export default function MarkdownRenderer({
                                 style={{
                                     maxWidth: '100%',
                                     height: 'auto',
+                                    aspectRatio: styleObj.aspectRatio || '16 / 9',
                                     display: 'block',
                                     margin: '1.5rem auto',
                                     borderRadius: '0.75rem',

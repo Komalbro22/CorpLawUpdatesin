@@ -156,10 +156,6 @@ export default async function RootLayout({
             `,
           }}
         />
-        <link rel="preconnect" href="https://i.ibb.co" crossOrigin="anonymous" />
-        <link rel="dns-prefetch" href="https://i.ibb.co" />
-        <link rel="preconnect" href="https://fcosrsznbxedischtbwe.supabase.co" crossOrigin="anonymous" />
-        <link rel="dns-prefetch" href="https://fcosrsznbxedischtbwe.supabase.co" />
         <link rel="llms" href="/llms.txt" />
         <link rel="describedby" href="/llms.txt" type="text/markdown" />
         <link rel="webmcp" href="/.well-known/webmcp" type="application/json" />

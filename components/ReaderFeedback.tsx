@@ -105,7 +105,7 @@ export default function ReaderFeedback({
             <p className="text-sm font-bold text-navy dark:text-slate-200">
               Was this {contextType === 'calculator' ? 'calculation' : contextType === 'document' ? 'document template' : 'article'} accurate and helpful?
             </p>
-            <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+            <p className="text-xs text-slate-600 dark:text-slate-300 mt-0.5">
               Help us maintain high accuracy standards across corporate law updates.
             </p>
           </div>

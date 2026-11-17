@@ -248,7 +248,7 @@ export default function NotificationBell() {
             : 'Get instant alerts for new circulars'
         }
         aria-label="Web Push Notifications"
-        className={`relative flex size-11 items-center justify-center rounded-xl border transition-colors duration-200 focus:outline-hidden focus:ring-2 focus:ring-amber-400 ${
+        className={`relative flex size-11 items-center justify-center rounded-xl border transition-[background-color,color] duration-200 focus:outline-hidden focus:ring-2 focus:ring-amber-400 ${
           permission === 'denied'
             ? 'bg-red-50 dark:bg-red-950/40 text-red-600 dark:text-red-400 border-red-200 dark:border-red-800'
             : isSubscribed
@@ -321,7 +321,6 @@ export default function NotificationBell() {
       {guidanceModalOpen && (
         <div
           className="fixed inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-4"
-          role="presentation"
           onClick={() => setGuidanceModalOpen(false)}
         >
           <div

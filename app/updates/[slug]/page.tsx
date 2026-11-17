@@ -31,6 +31,7 @@ import WhatsAppFloatingButton from '@/components/WhatsAppFloatingButton'
 import WhatsAppArticleEndBox from '@/components/WhatsAppArticleEndBox'
 
 import ArticleImage from '@/components/ArticleImage'
+import { getProxiedImageUrl } from '@/lib/image-utils'
 
 import { QuickAnswer } from '@/components/QuickAnswer'
 import { AlertCircle, BookOpen, CalendarDays, ChevronDown, Clock3, Eye, FileText, Lightbulb, CheckCircle2, Scale } from 'lucide-react'
@@ -471,7 +472,29 @@ export default async function SingleUpdatePage({ params }: { params: Promise<{ s
                     // Suppress duplicate leading image in body when active banner is rendered as top hero
                     contentPart1 = contentPart1.slice(match[0].length)
                 } else if (autoBadgeType) {
-                    leadingFeaturedImage = match[1]
+                    let processedImg = match[1]
+                    // Fix A1: Guarantee explicit dimensions and 16/9 aspect ratio to eliminate unsized-image and layout shifts
+                    if (!processedImg.includes('width=')) {
+                        processedImg = processedImg.replace(/<img\b/i, '<img width="1200" height="675" style="aspect-ratio: 16/9; max-width: 100%; height: auto;" ')
+                    }
+                    // Fix A4: Guarantee valid alt attribute
+                    if (!processedImg.includes('alt=') || processedImg.includes('alt=""') || processedImg.includes("alt=''")) {
+                        const escapedTitle = (update.title || 'Corporate Law Update').replace(/"/g, '&quot;')
+                        if (processedImg.includes('alt=')) {
+                            processedImg = processedImg.replace(/alt=["']["']/i, `alt="${escapedTitle}"`)
+                        } else {
+                            processedImg = processedImg.replace(/<img\b/i, `<img alt="${escapedTitle}" `)
+                        }
+                    }
+                    // Fix A3: Recompress banner via image-proxy
+                    const srcMatch = processedImg.match(/src=["']([^"']+)["']/i)
+                    if (srcMatch && srcMatch[1]) {
+                        const proxied = getProxiedImageUrl(srcMatch[1], 1200)
+                        if (proxied && proxied !== srcMatch[1]) {
+                            processedImg = processedImg.replace(srcMatch[1], proxied)
+                        }
+                    }
+                    leadingFeaturedImage = processedImg
                     contentPart1 = contentPart1.slice(match[0].length)
                 }
             }
@@ -605,7 +628,7 @@ export default async function SingleUpdatePage({ params }: { params: Promise<{ s
                 })()}
 
                 {/* 3. Meta row */}
-                <div className="mb-4 flex flex-wrap items-center gap-x-3 gap-y-1.5 sm:gap-x-4 sm:gap-y-2 text-xs sm:text-sm text-slate-500 dark:text-slate-400">
+                <div className="mb-4 flex flex-wrap items-center gap-x-3 gap-y-1.5 sm:gap-x-4 sm:gap-y-2 text-xs sm:text-sm text-slate-600 dark:text-slate-300">
                     <time className="publish-date inline-flex items-center gap-1.5" dateTime={update.published_at} suppressHydrationWarning>
                         <CalendarDays className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-slate-400" aria-hidden />
                         {formattedDate}
@@ -621,13 +644,14 @@ export default async function SingleUpdatePage({ params }: { params: Promise<{ s
                         </span>
                     )}
                     {update.source_name && (
-                        <span className="print:hidden text-slate-500 dark:text-slate-400">
+                        <span className="print:hidden text-slate-600 dark:text-slate-300">
                             Source:{' '}
                             {update.source_url ? (
                                 <a 
                                     href={update.source_url} 
                                     target="_blank" 
                                     rel="noopener noreferrer" 
+                                    aria-label={`Official source: ${update.source_name}`}
                                     className="hover:text-gold underline font-semibold transition-colors"
                                     title={update.source_name}
                                 >
@@ -848,28 +872,33 @@ export default async function SingleUpdatePage({ params }: { params: Promise<{ s
                 <ErrorBoundary>
                     <div className="article-content entry-content post-content" suppressHydrationWarning>
                         {activeBanner ? (
-                            <div className="mb-6 overflow-hidden rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-xs">
+                            <div className="mb-6 overflow-hidden rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-xs aspect-video">
                                 <img
-                                    src={activeBanner.formats?.hero_webp || activeBanner.formats?.og_png}
+                                    src={getProxiedImageUrl(activeBanner.formats?.hero_webp || activeBanner.formats?.og_png, 1200) || (activeBanner.formats?.hero_webp || activeBanner.formats?.og_png)}
                                     alt={activeBanner.alt || update.title}
                                     width={1200}
-                                    height={630}
+                                    height={675}
                                     fetchPriority="high"
                                     decoding="async"
-                                    className="w-full h-auto object-cover rounded-2xl"
+                                    style={{ aspectRatio: '16/9' }}
+                                    className="w-full h-auto aspect-video object-cover rounded-2xl"
                                 />
                             </div>
                         ) : (
                             <>
                                 {leadingFeaturedImage && (
-                                    <div className="mb-6 overflow-hidden rounded-2xl" dangerouslySetInnerHTML={{ __html: leadingFeaturedImage }} />
+                                    <div className="mb-6 overflow-hidden rounded-2xl aspect-video" dangerouslySetInnerHTML={{ __html: leadingFeaturedImage }} />
                                 )}
                                 {!leadingFeaturedImage && fallbackFeaturedImage && (
-                                    <div className="mb-6 overflow-hidden rounded-2xl">
+                                    <div className="mb-6 overflow-hidden rounded-2xl aspect-video">
                                         <img
-                                            src={fallbackFeaturedImage}
+                                            src={getProxiedImageUrl(fallbackFeaturedImage, 1200) || fallbackFeaturedImage}
                                             alt={update.title}
-                                            className="w-full h-auto object-cover rounded-2xl border border-slate-200/80 dark:border-slate-800"
+                                            width={1200}
+                                            height={675}
+                                            decoding="async"
+                                            style={{ aspectRatio: '16/9' }}
+                                            className="w-full h-auto aspect-video object-cover rounded-2xl border border-slate-200/80 dark:border-slate-800"
                                         />
                                     </div>
                                 )}
@@ -1045,6 +1074,7 @@ export default async function SingleUpdatePage({ params }: { params: Promise<{ s
                                             href={update.source_url}
                                             target="_blank"
                                             rel="noopener noreferrer"
+                                            aria-label={`Official source: ${update.source_name}`}
                                             className="text-gold font-bold hover:text-amber-600 transition-colors underline break-all text-sm"
                                         >
                                             {update.source_name}
@@ -1057,6 +1087,7 @@ export default async function SingleUpdatePage({ params }: { params: Promise<{ s
                                             href={src.url}
                                             target="_blank"
                                             rel="noopener noreferrer"
+                                            aria-label={src.name || 'Official source document'}
                                             className="text-gold font-bold hover:text-amber-600 transition-colors underline break-all text-sm"
                                         >
                                             {src.name || src.url}
@@ -1070,7 +1101,7 @@ export default async function SingleUpdatePage({ params }: { params: Promise<{ s
             })()}
 
             {/* Reader Feedback */}
-            <div className="print:hidden">
+            <div className="print:hidden min-h-[90px]">
                 <ReaderFeedback
                     contextType="article"
                     contextTitle={update.title}
@@ -1097,13 +1128,13 @@ export default async function SingleUpdatePage({ params }: { params: Promise<{ s
             <div id="article-end" className="h-4" aria-hidden />
 
             {/* Google Preferred Source Callout Banner */}
-            <div className="my-8 print:hidden">
+            <div className="my-8 print:hidden min-h-[140px]">
                 <GooglePreferredSourceButton variant="banner" location="article_bottom_banner" slug={update.slug} />
             </div>
 
             {/* 6. RELATED UPDATES */}
             {related.length > 0 && (
-                <section className="pt-10 border-t border-slate-200 dark:border-slate-800 print:hidden">
+                <section className="pt-10 border-t border-slate-200 dark:border-slate-800 print:hidden min-h-[360px]">
                     <h2 className="text-xl font-heading font-bold text-navy dark:text-white mb-6">Related Updates</h2>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
                         {related.map((rel: any, i: number) => (

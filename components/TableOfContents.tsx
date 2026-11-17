@@ -155,7 +155,7 @@ export default function TableOfContents({ content, inline = false, hideMobile = 
                   ${activeId === heading.id
                     ? 'border-l-2 border-amber-600 dark:border-amber-400 text-amber-700 dark:text-amber-400 font-semibold'
                     : heading.level === 3
-                      ? 'text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200'
+                      ? 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-slate-100'
                       : 'text-slate-700 dark:text-slate-300 hover:text-navy dark:hover:text-white'
                   }`}
               >

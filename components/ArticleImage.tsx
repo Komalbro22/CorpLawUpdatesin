@@ -11,6 +11,7 @@ interface ArticleImageProps {
   category?: string | null
   priority?: boolean
   className?: string
+  width?: number
 }
 
 const REGULATOR_THEMES: Record<string, { bg: string; icon: typeof Building2; label: string }> = {
@@ -22,7 +23,7 @@ const REGULATOR_THEMES: Record<string, { bg: string; icon: typeof Building2; lab
   FEMA: { bg: 'from-teal-900 via-slate-900 to-slate-950', icon: Globe, label: 'Foreign Exchange Management' },
 }
 
-export default function ArticleImage({ src, alt, category, priority = false, className = '' }: ArticleImageProps) {
+export default function ArticleImage({ src, alt, category, priority = false, className = '', width = 420 }: ArticleImageProps) {
   const [hasError, setHasError] = useState(false)
   const [isLoading, setIsLoading] = useState(!priority)
 
@@ -35,7 +36,7 @@ export default function ArticleImage({ src, alt, category, priority = false, cla
   const theme = REGULATOR_THEMES[catKey] || { bg: 'from-navy via-slate-900 to-slate-950', icon: Newspaper, label: 'Corporate Law Update' }
   const IconComponent = theme.icon
 
-  const resolvedSrc = getProxiedImageUrl(src, 720)
+  const resolvedSrc = getProxiedImageUrl(src, width)
 
   if (!resolvedSrc || hasError) {
     return (
@@ -58,16 +59,20 @@ export default function ArticleImage({ src, alt, category, priority = false, cla
 
   return (
     <div className={`relative w-full h-full bg-slate-100 dark:bg-slate-900 overflow-hidden ${className}`}>
-      {/* Background skeleton: renders behind the image, never blocking it with z-index */}
+      {/* Background skeleton: renders behind the image, GPU composited opacity */}
       {!priority && isLoading && (
-        <div className="absolute inset-0 bg-slate-200 dark:bg-slate-800 animate-pulse" />
+        <div
+          className="absolute inset-0 bg-slate-200 dark:bg-slate-800 animate-pulse"
+          style={{ willChange: 'opacity' }}
+          aria-hidden="true"
+        />
       )}
 
       <Image
         src={resolvedSrc}
         alt={alt}
         fill
-        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 400px"
+        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 420px"
         priority={priority}
         unoptimized={true}
         onLoad={() => setIsLoading(false)}
