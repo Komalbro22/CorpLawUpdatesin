@@ -464,7 +464,7 @@ export function computePreviewInstances(
         (y: number) => `Q1 (Apr-Jun) FY ${y}-${String(y+1).slice(-2)}`,
         (y: number) => `Q2 (Jul-Sep) FY ${y}-${String(y+1).slice(-2)}`,
         (y: number) => `Q3 (Oct-Dec) FY ${y}-${String(y+1).slice(-2)}`,
-        (y: number) => `Q4 (Jan-Mar) FY ${y-1}-${String(y).slice(-2)}`,
+        (y: number) => `Q4 (Jan-Mar) FY ${y}-${String(y+1).slice(-2)}`,
       ]
 
       let curY = startYear - 1

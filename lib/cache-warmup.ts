@@ -80,6 +80,8 @@ export async function warmUpPublishedArticle(slug: string, timeoutMs: number = 8
     `${baseUrl}/updates`,
     `${baseUrl}/sitemap.xml`,
     `${baseUrl}/news-sitemap.xml`,
+    `${baseUrl}/llms.txt`,
+    `${baseUrl}/llms-full.txt`,
   ]
 
   return warmUpUrls(urls, timeoutMs)

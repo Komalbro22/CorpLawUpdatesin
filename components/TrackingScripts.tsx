@@ -82,27 +82,37 @@ export default function TrackingScripts() {
       }
     }
 
-    // Fetch tracker IDs dynamically at runtime
-    fetch('/api/settings/trackers')
-      .then(async (res) => {
-        if (!res.ok) return null
-        const contentType = res.headers.get('content-type')
-        if (contentType && contentType.includes('application/json')) {
-          return res.json()
-        }
-        return null
-      })
-      .then((data) => {
-        if (data) {
-          setIds({
-            gaId: data.gaId || null,
-            clarityId: data.clarityId || null,
-          })
-        }
-      })
-      .catch((err) => {
-        console.warn('Tracker settings unavailable:', err)
-      })
+    // Defer tracker IDs fetch until browser idle to eliminate any render-blocking overhead
+    const initTrackers = () => {
+      fetch('/api/settings/trackers')
+        .then(async (res) => {
+          if (!res.ok) return null
+          const contentType = res.headers.get('content-type')
+          if (contentType && contentType.includes('application/json')) {
+            return res.json()
+          }
+          return null
+        })
+        .then((data) => {
+          if (data) {
+            setIds({
+              gaId: data.gaId || null,
+              clarityId: data.clarityId || null,
+            })
+          }
+        })
+        .catch((err) => {
+          console.warn('Tracker settings unavailable:', err)
+        })
+    }
+
+    if (typeof window !== 'undefined') {
+      if ('requestIdleCallback' in window) {
+        window.requestIdleCallback(() => initTrackers(), { timeout: 3500 })
+      } else {
+        setTimeout(initTrackers, 3000)
+      }
+    }
 
     return () => {
       window.removeEventListener('error', handleGlobalScriptError, true)

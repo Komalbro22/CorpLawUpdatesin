@@ -91,7 +91,7 @@ export const metadata: Metadata = {
     google: process.env.NEXT_PUBLIC_GSC_VERIFICATION || '',
   },
   other: {
-    'google-adsense-account': 'ca-pub-8404756575471756',
+    'google-adsense-account': 'ca-pub-8806384636897940',
   },
 }
 

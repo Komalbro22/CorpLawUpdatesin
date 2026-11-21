@@ -10,6 +10,7 @@ interface TableSectionProps {
   color: string
   dot: string
   entries: ComplianceEntry[]
+  allRegulatorEntries?: ComplianceEntry[]
   onReport: (id: string, name: string) => void
   onRowClick: (id: string) => void
 }

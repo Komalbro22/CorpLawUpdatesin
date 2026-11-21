@@ -338,6 +338,19 @@ export default async function SingleUpdatePage({ params }: { params: Promise<{ s
                         }
                     }
                 }
+
+                // 2c. Try extracting <div ...><p ...>Question?</p><p ...>Answer</p></div> under the FAQ section
+                if (faqs.length === 0) {
+                    const divRegex = /<div\b[^>]*>\s*<p\b[^>]*>([\s\S]*?)<\/p>\s*<p\b[^>]*>([\s\S]*?)<\/p>\s*<\/div>/gi
+                    let divMatch: RegExpExecArray | null
+                    while ((divMatch = divRegex.exec(faqSection)) !== null) {
+                        const q = cleanText(divMatch[1].replace(/<[^>]*>/g, ''))
+                        const a = cleanText(divMatch[2].replace(/<[^>]*>/g, ''))
+                        if (q && a && q.length > 5 && a.length > 5 && (q.includes('?') || /^(what|when|from|where|how|why|is|will|can|does|do|has|did)/i.test(q))) {
+                            faqs.push({ question: q, answer: a })
+                        }
+                    }
+                }
             }
         }
 

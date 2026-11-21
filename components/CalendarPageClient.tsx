@@ -1,5 +1,7 @@
 'use client'
 
+import packageJson from '@/package.json'
+
 import React, { useState, useEffect, useMemo } from 'react'
 import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
@@ -129,6 +131,20 @@ export default function CalendarPageClient({ entries }: CalendarPageClientProps)
         url.searchParams.set('highlight', entry.id)
         window.history.replaceState({}, '', url.toString())
       }
+    }
+  }
+
+    // Reset all filters including search query, period and month jump
+  function handleResetAllFilters() {
+    setSearchQuery('')
+    setPeriodFilter('all')
+    setSelectedMonth('all')
+    if (typeof window !== 'undefined') {
+      const url = new URL(window.location.href)
+      url.searchParams.delete('month')
+      url.searchParams.delete('highlight')
+      url.searchParams.delete('form')
+      window.history.replaceState({}, '', url.pathname)
     }
   }
 
@@ -350,7 +366,7 @@ export default function CalendarPageClient({ entries }: CalendarPageClientProps)
         <div className="max-w-4xl mx-auto space-y-3">
           <div className="inline-flex items-center gap-2 bg-amber-400/10 border border-amber-400/30 text-amber-300 px-3.5 py-1 rounded-full text-xs font-semibold tracking-wide">
             <span>🇮🇳</span>
-            <span>All India Corporate & Tax Compliance Calendar</span>
+            <span>All India Corporate & Tax Compliance Calendar (v{packageJson.version})</span>
           </div>
           <h1 className="text-2xl sm:text-4xl md:text-5xl font-heading font-extrabold text-white tracking-tight leading-tight">
             Compliance Calendar 2026-27
@@ -609,7 +625,7 @@ export default function CalendarPageClient({ entries }: CalendarPageClientProps)
           <div className="flex flex-col sm:flex-row sm:items-center justify-between text-xs text-slate-500 dark:text-slate-400 px-1 gap-1">
             <span>Official statutory sources: MCA21, GSTN, Income Tax e-Filing, SEBI, EPFO, RBI FIRMS.</span>
             <span className="font-semibold text-navy dark:text-slate-300">
-              Last verified: {dynamicVerificationDate}
+              Last verified: {dynamicVerificationDate} · v{packageJson.version}
             </span>
           </div>
         </div>
@@ -624,7 +640,7 @@ export default function CalendarPageClient({ entries }: CalendarPageClientProps)
               title="No compliance deadlines match your filter"
               description="Try selecting 'All Deadlines', adjusting your search query, or checking another regulator."
               actionLabel="Reset All Filters"
-              actionHref="/calendar"
+              onAction={handleResetAllFilters}
             />
           </div>
         ) : view === 'table' ? (
@@ -637,6 +653,7 @@ export default function CalendarPageClient({ entries }: CalendarPageClientProps)
                   color="bg-orange-600"
                   dot="bg-orange-500"
                   entries={taxEntries}
+                  allRegulatorEntries={entries.filter(e => e.regulator === 'income_tax')}
                   onReport={openReportError}
                   onRowClick={handleRowClick}
                 />
@@ -651,6 +668,7 @@ export default function CalendarPageClient({ entries }: CalendarPageClientProps)
                   color="bg-cyan-600"
                   dot="bg-cyan-500"
                   entries={gstEntries}
+                  allRegulatorEntries={entries.filter(e => e.regulator === 'gst')}
                   onReport={openReportError}
                   onRowClick={handleRowClick}
                 />
@@ -665,6 +683,7 @@ export default function CalendarPageClient({ entries }: CalendarPageClientProps)
                   color="bg-navy"
                   dot="bg-blue-500"
                   entries={mcaEntries}
+                  allRegulatorEntries={entries.filter(e => e.regulator === 'mca')}
                   onReport={openReportError}
                   onRowClick={handleRowClick}
                 />
@@ -679,6 +698,7 @@ export default function CalendarPageClient({ entries }: CalendarPageClientProps)
                   color="bg-green-700"
                   dot="bg-green-500"
                   entries={sebiEntries}
+                  allRegulatorEntries={entries.filter(e => e.regulator === 'sebi')}
                   onReport={openReportError}
                   onRowClick={handleRowClick}
                 />
@@ -693,6 +713,7 @@ export default function CalendarPageClient({ entries }: CalendarPageClientProps)
                   color="bg-indigo-600"
                   dot="bg-indigo-500"
                   entries={laborEntries}
+                  allRegulatorEntries={entries.filter(e => e.regulator === 'labor_law')}
                   onReport={openReportError}
                   onRowClick={handleRowClick}
                 />
@@ -707,6 +728,7 @@ export default function CalendarPageClient({ entries }: CalendarPageClientProps)
                   color="bg-teal-700"
                   dot="bg-teal-500"
                   entries={femaEntries}
+                  allRegulatorEntries={entries.filter(e => e.regulator === 'fema')}
                   onReport={openReportError}
                   onRowClick={handleRowClick}
                 />
@@ -721,6 +743,7 @@ export default function CalendarPageClient({ entries }: CalendarPageClientProps)
                   color="bg-purple-800"
                   dot="bg-purple-500"
                   entries={rbiEntries}
+                  allRegulatorEntries={entries.filter(e => e.regulator === 'rbi')}
                   onReport={openReportError}
                   onRowClick={handleRowClick}
                 />
@@ -735,6 +758,7 @@ export default function CalendarPageClient({ entries }: CalendarPageClientProps)
                   color="bg-slate-700"
                   dot="bg-slate-500"
                   entries={otherEntries}
+                  allRegulatorEntries={entries.filter(e => e.regulator === 'other')}
                   onReport={openReportError}
                   onRowClick={handleRowClick}
                 />

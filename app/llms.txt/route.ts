@@ -1,7 +1,8 @@
 import { NextResponse } from 'next/server'
 import { supabaseAdmin } from '@/lib/supabase-server'
 
-export const revalidate = 86400 // 24 hours
+export const dynamic = 'force-dynamic'
+export const revalidate = 0 // Dynamic request-time generation to prevent stale deploy snapshots
 
 export async function GET() {
   const BASE_URL = 'https://www.corplawupdates.in'
@@ -17,7 +18,7 @@ export async function GET() {
       .not('published_at', 'is', null)
       .lte('published_at', new Date().toISOString())
       .order('published_at', { ascending: false })
-      .limit(20)
+      .limit(60)
 
     recentUpdates = (data || []) as any[]
   }
@@ -91,7 +92,7 @@ Articles are researched against official regulatory sources and reviewed through
   return new NextResponse(content, {
     headers: {
       'Content-Type': 'text/plain; charset=utf-8',
-      'Cache-Control': 'public, max-age=86400, s-maxage=86400, stale-while-revalidate=3600',
+      'Cache-Control': 'public, max-age=60, s-maxage=300, stale-while-revalidate=600',
     },
   })
 }

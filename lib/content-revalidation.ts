@@ -78,6 +78,8 @@ export function revalidateArticleMutation({
 
     try { revalidatePath('/sitemap.xml') } catch {}
     try { revalidatePath('/news-sitemap.xml') } catch {}
+    try { revalidatePath('/llms.txt') } catch {}
+    try { revalidatePath('/llms-full.txt') } catch {}
 }
 
 /**
@@ -98,6 +100,8 @@ export function revalidateGlossaryMutation(slug?: string, oldSlug?: string) {
 
     try { revalidatePath('/glossary', 'page') } catch {}
     try { revalidatePath('/sitemap.xml') } catch {}
+    try { revalidatePath('/llms.txt') } catch {}
+    try { revalidatePath('/llms-full.txt') } catch {}
 }
 
 /**

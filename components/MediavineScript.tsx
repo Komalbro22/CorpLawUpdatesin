@@ -7,6 +7,12 @@ export default function MediavineScript() {
 
   // Exclude Mediavine Journey script from all admin and auth routes
   if (!pathname || pathname.startsWith('/admin')) {
+    if (typeof window !== 'undefined') {
+      try {
+        document.querySelectorAll('script[src*="scriptwrapper.com"]').forEach(el => el.remove())
+        document.querySelectorAll('[id*="grow"], [class*="grow-"], .grow-housead, #grow-me-container, div[data-mediavine]').forEach(el => el.remove())
+      } catch {}
+    }
     return null
   }
 

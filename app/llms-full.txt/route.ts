@@ -16,7 +16,7 @@ export async function GET() {
       .not('published_at', 'is', null)
       .lte('published_at', new Date().toISOString())
       .order('published_at', { ascending: false })
-      .limit(50)
+      .limit(200)
 
     recentUpdates = (data || []) as any[]
   }
@@ -49,7 +49,7 @@ export async function GET() {
 - International Financial Services Centres Authority (IFSCA / GIFT City): ${BASE_URL}/category/ifsca
 - Taxation (CBDT, CBIC & GST): ${BASE_URL}/category/taxation
 
-## Full Regulatory Articles & Updates (Latest 50)
+## Full Regulatory Articles & Updates (Latest 200)
 ${updatesList}
 
 ## Sitemap & Full Feeds
@@ -60,7 +60,7 @@ ${updatesList}
   return new NextResponse(content, {
     headers: {
       'Content-Type': 'text/plain; charset=utf-8',
-      'Cache-Control': 'public, max-age=86400, s-maxage=86400, stale-while-revalidate=3600',
+      'Cache-Control': 'public, max-age=60, s-maxage=300, stale-while-revalidate=600',
     },
   })
 }

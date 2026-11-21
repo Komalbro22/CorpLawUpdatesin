@@ -129,12 +129,14 @@ describe('CDN Cache & 404 Prevention Suite', () => {
 
       const results = await warmUpPublishedArticle('test-article-slug-2026')
 
-      expect(results).toHaveLength(5)
+      expect(results).toHaveLength(7)
       expect(fetchedUrls).toContain('https://www.corplawupdates.in/updates/test-article-slug-2026')
       expect(fetchedUrls).toContain('https://www.corplawupdates.in/')
       expect(fetchedUrls).toContain('https://www.corplawupdates.in/updates')
       expect(fetchedUrls).toContain('https://www.corplawupdates.in/sitemap.xml')
       expect(fetchedUrls).toContain('https://www.corplawupdates.in/news-sitemap.xml')
+      expect(fetchedUrls).toContain('https://www.corplawupdates.in/llms.txt')
+      expect(fetchedUrls).toContain('https://www.corplawupdates.in/llms-full.txt')
 
       expect(results.every(r => r.ok && r.status === 200)).toBe(true)
     })
