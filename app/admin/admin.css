@@ -664,19 +664,4 @@
 }
 
 
-/* ==========================================================================
-   MEDIAVINE & GROW AD NETWORK STRICT SUPPRESSION ON ADMIN INTERFACES
-   ========================================================================== */
-[id*="grow"],
-[class*="grow-"],
-.grow-housead,
-#grow-me-container,
-div[data-mediavine],
-div[data-mv-ad],
-.mediavine-journey,
-iframe[src*="mediavine"],
-iframe[src*="grow.me"] {
-  display: none !important;
-  visibility: hidden !important;
-  pointer-events: none !important;
-}
+
